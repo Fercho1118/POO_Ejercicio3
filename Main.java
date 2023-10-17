@@ -1,109 +1,112 @@
 /**
  * Clase Main
  * Fernando Rueda - 23748
- * Descripción: Clase principal para ejecutar el programa.
- * Fecha de creación: [24/09/2023]
- * Fecha de última modificación: [24/09/2023]
+ * Descripción: Clase principal para ejecutar el sistema del torneo de voleibol.
+ * Fecha de creación: [14/10/2023]
+ * Fecha de última modificación: [16/10/2023]
  */
-import java.util.InputMismatchException;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Championship championship = new Championship();
         Scanner scanner = new Scanner(System.in);
+        Tournament tournament = new Tournament();
 
         while (true) {
-            System.out.println("1. Registrar Portero");
-            System.out.println("2. Registrar Extremo");
-            System.out.println("3. Mostrar Todos los Jugadores");
-            System.out.println("4. Mostrar los 3 Mejores Porteros");
-            System.out.println("5. Mostrar Extremos con Alta Efectividad");
-            System.out.println("6. Salir");
-            System.out.print("Elige una opción: ");
+            System.out.println("1. Añadir jugador");
+            System.out.println("2. Mostrar todos los jugadores");
+            System.out.println("3. Mostrar los 3 mejores líberos");
+            System.out.println("4. Mostrar cantidad de pasadores con más de un 80% de efectividad");
+            System.out.println("5. Salir");
 
-            int choice;
-            try {
-                choice = scanner.nextInt();
-                scanner.nextLine(); // consume the newline
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida. Por favor, elige de nuevo.");
-                scanner.nextLine(); // consume the invalid input
-                continue;
-            }
+            int option = scanner.nextInt();
+            scanner.nextLine();  // consume newline
 
-            try {
-                switch (choice) {
-                    case 1:
-                        // Registrar Portero
-                        System.out.print("Nombre: ");
-                        String goalkeeperName = scanner.nextLine();
-                        System.out.print("País: ");
-                        String goalkeeperCountry = scanner.nextLine();
-                        System.out.print("Faltas: ");
-                        int goalkeeperFouls = scanner.nextInt();
-                        System.out.print("Goles Directos: ");
-                        int goalkeeperDirectGoals = scanner.nextInt();
-                        System.out.print("Total de Lanzamientos: ");
-                        int goalkeeperTotalThrows = scanner.nextInt();
-                        System.out.print("Paradas Efectivas: ");
-                        int effectiveStops = scanner.nextInt();
-                        System.out.print("Goles Recibidos: ");
-                        int receivedGoals = scanner.nextInt();
-                        scanner.nextLine(); // consume the newline
+            switch (option) {
+                case 1:
+                    System.out.println("Ingrese el tipo de jugador (Libero, Pasador, Auxiliar, Opuesto):");
+                    String type = scanner.nextLine();
 
-                        Goalkeeper goalkeeper = new Goalkeeper(goalkeeperName, goalkeeperCountry, goalkeeperFouls, goalkeeperDirectGoals, goalkeeperTotalThrows, effectiveStops, receivedGoals);
-                        championship.registerPlayer(goalkeeper);
-                        break;
-                    case 2:
-                        // Registrar Extremo
-                        System.out.print("Nombre: ");
-                        String wingerName = scanner.nextLine();
-                        System.out.print("País: ");
-                        String wingerCountry = scanner.nextLine();
-                        System.out.print("Faltas: ");
-                        int wingerFouls = scanner.nextInt();
-                        System.out.print("Goles Directos: ");
-                        int wingerDirectGoals = scanner.nextInt();
-                        System.out.print("Total de Lanzamientos: ");
-                        int wingerTotalThrows = scanner.nextInt();
-                        System.out.print("Pases: ");
-                        int passes = scanner.nextInt();
-                        System.out.print("Asistencias Efectivas: ");
-                        int effectiveAssists = scanner.nextInt();
-                        scanner.nextLine(); // consume the newline
+                    System.out.println("Ingrese el nombre:");
+                    String name = scanner.nextLine();
 
-                        Winger winger = new Winger(wingerName, wingerCountry, wingerFouls, wingerDirectGoals, wingerTotalThrows, passes, effectiveAssists);
-                        championship.registerPlayer(winger);
-                        break;
-                    case 3:
-                        championship.displayAllPlayers();
-                        break;
-                    case 4:
-                        // Mostrar los 3 Mejores Porteros
-                        List<Goalkeeper> topGoalkeepers = championship.getTopGoalkeepers();
-                        for (Goalkeeper topGoalkeeper : topGoalkeepers) {
-                            System.out.println(topGoalkeeper.name + " - Efectividad: " + topGoalkeeper.calculateEffectiveness());
-                        }
-                        break;
-                    case 5:
-                        // Mostrar Extremos con Alta Efectividad
-                        long highEffectiveWingersCount = championship.getHighEffectiveWingers();
-                        System.out.println("Número de Extremos con Alta Efectividad: " + highEffectiveWingersCount);
-                        break;
-                    case 6:
-                        scanner.close();
-                        return;
-                    default:
-                        System.out.println("Opción inválida. Por favor, elige de nuevo.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida. Por favor, introduce el tipo de dato correcto.");
-                scanner.nextLine(); // consume the invalid input
+                    System.out.println("Ingrese el país:");
+                    String country = scanner.nextLine();
+
+                    System.out.println("Ingrese errores:");
+                    int errors = scanner.nextInt();
+
+                    System.out.println("Ingrese aces:");
+                    int aces = scanner.nextInt();
+
+                    System.out.println("Ingrese total de servicios:");
+                    int totalServices = scanner.nextInt();
+
+                    switch (type.toLowerCase()) {
+                        case "libero":
+                            System.out.println("Ingrese recibos efectivos:");
+                            int effectiveReceives = scanner.nextInt();
+                            Libero libero = new Libero(name, country, errors, aces, totalServices, effectiveReceives);
+                            tournament.addPlayer(libero);
+                            break;
+                        case "pasador":
+                            System.out.println("Ingrese asistencias:");
+                            int assists = scanner.nextInt();
+                            System.out.println("Ingrese fintas:");
+                            int feints = scanner.nextInt();  // Agregado
+                            Setter setter = new Setter(name, country, errors, aces, totalServices, assists, feints);
+                            tournament.addPlayer(setter);
+                            break;
+                        case "auxiliar":
+                            System.out.println("Ingrese bloqueos efectivos:");
+                            int effectiveBlocksAux = scanner.nextInt();  // Agregado
+                            System.out.println("Ingrese bloqueos fallidos:");
+                            int failedBlocksAux = scanner.nextInt();  // Agregado
+                            Auxiliary auxiliary = new Auxiliary(name, country, errors, aces, totalServices, effectiveBlocksAux, failedBlocksAux, errors);
+                            tournament.addPlayer(auxiliary);
+                            break;
+                        case "opuesto":
+                            System.out.println("Ingrese bloqueos efectivos:");
+                            int effectiveBlocksOpp = scanner.nextInt();  // Agregado
+                            System.out.println("Ingrese bloqueos fallidos:");
+                            int failedBlocksOpp = scanner.nextInt();  // Agregado
+                            Opposite opposite = new Opposite(name, country, errors, aces, totalServices, effectiveBlocksOpp, failedBlocksOpp, errors);
+                            tournament.addPlayer(opposite);
+                            break;
+                        default:
+                            System.out.println("Tipo de jugador no reconocido.");
+                            break;
+                    }
+                    break;
+                case 2:
+                    tournament.displayAllPlayers();
+                    break;
+                case 3:
+                    tournament.getTop3Liberos();
+                    List<Libero> topLiberos = tournament.getTop3Liberos();
+                    System.out.println("Los 3 mejores líberos son:");
+                    for (Libero libero : topLiberos) {
+                        System.out.println(libero);
+                    }
+                    break;
+                case 4:
+                    int count = (int) tournament.getCountOfSettersAbove80();
+                    System.out.println("Cantidad de pasadores con más de un 80% de efectividad: " + count);
+                    break;
+                case 5:
+                    System.out.println("Saliendo...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Opción no válida.");
+                    break;
             }
         }
     }
 }
+
+
 
 

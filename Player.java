@@ -1,57 +1,71 @@
 /**
  * Clase Player
  * Fernando Rueda - 23748
- * Descripción: Representa un jugador genérico en el campeonato de balonmano.
- * Fecha de creación: [24/09/2023]
- * Fecha de última modificación: [24/09/2023]
+ * Descripción: Clase base que representa a un jugador en un torneo de voleibol.
+ * Fecha de creación: [14/10/2023]
+ * Fecha de última modificación: [16/10/2023]
  */
 public abstract class Player {
-    /**
-     * Nombre del jugador.
-     */
     protected String name;
-    
-    /**
-     * País del jugador.
-     */
     protected String country;
-    
-    /**
-     * Número de faltas cometidas por el jugador.
-     */
-    protected int fouls;
-    
-    /**
-     * Número de goles directos anotados por el jugador.
-     */
-    protected int directGoals;
-    
-    /**
-     * Número total de lanzamientos realizados por el jugador.
-     */
-    protected int totalThrows;
+    protected int errors;
+    protected int aces;
+    protected int totalServices;
 
     /**
-     * Constructor para inicializar un jugador con sus atributos básicos.
-     * @param name Nombre del jugador.
-     * @param country País del jugador.
-     * @param fouls Número de faltas cometidas por el jugador.
-     * @param directGoals Número de goles directos anotados por el jugador.
-     * @param totalThrows Número total de lanzamientos realizados por el jugador.
+     * Constructor de la clase Player.
+     *
+     * @param name          Nombre del jugador.
+     * @param country       País de origen del jugador.
+     * @param errors        Número de errores cometidos por el jugador.
+     * @param aces          Número de aces realizados por el jugador.
+     * @param totalServices Total de servicios realizados por el jugador.
      */
-    public Player(String name, String country, int fouls, int directGoals, int totalThrows) {
+    public Player(String name, String country, int errors, int aces, int totalServices) {
         this.name = name;
         this.country = country;
-        this.fouls = fouls;
-        this.directGoals = directGoals;
-        this.totalThrows = totalThrows;
+        this.errors = errors;
+        this.aces = aces;
+        this.totalServices = totalServices;
     }
 
-    /**
-     * Método abstracto para calcular la efectividad del jugador.
-     * Debe ser implementado por las subclases.
-     * @return la efectividad del jugador.
-     */
     public abstract double calculateEffectiveness();
+
+    public String toCSV() {
+        return name + "," + country + "," + errors + "," + aces + "," + totalServices;
+    }
+
+    public static Player fromCSV(String csv) {
+        String[] parts = csv.split(",");
+        String type = parts[parts.length - 1];
+
+        switch (type) {
+            case "LIBERO":
+                return Libero.fromCSV(csv);
+            case "SETTER":
+                return Setter.fromCSV(csv);
+            case "OPPOSITE":
+                return Opposite.fromCSV(csv);
+            case "AUXILIARY":
+                return Auxiliary.fromCSV(csv);
+            default:
+                return null;
+        }
+    }
+    
+    @Override
+    public String toString() {
+    return "Nombre: " + name + ", País: " + country + ", Errores: " + errors + ", Aces: " + aces + ", Total de Servicios: " + totalServices;
+    }
+
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String getCountry() {
+        return country;
+    }
 }
+
 
